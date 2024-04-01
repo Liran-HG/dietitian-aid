@@ -16,8 +16,9 @@ export default function ButtonMeeting(props: Props) {
   return (
     <Menubar>
       <MenubarMenu>
-        <MenubarTrigger asChild><Button variant={"outline"} ><><StartMeetingIcon /> פגישה</></Button></MenubarTrigger>
-        <MenubarContent className="border-secondary border-2 rounded-md rtl:text-right rtl:-left-[200px] p-3 cursor-pointer shadow-md z-10 bg-white space-y-2">
+        <MenubarTrigger asChild><Button variant={"outline"} 
+            className="shadow-md"><><StartMeetingIcon /> פגישה</></Button></MenubarTrigger>
+        <MenubarContent className="border-secondary border-2 rounded-md rtl:text-right rtl:-left-[200px] p-3 cursor-pointer shadow-md z-10 bg-white space-y-2 my-2 -mr-14">
           <MenubarItem>
           <b>פנימית </b>
             פגישה פרונטלית

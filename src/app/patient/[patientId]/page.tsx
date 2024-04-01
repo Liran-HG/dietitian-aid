@@ -6,6 +6,8 @@ import { LoadToScaleIcon } from "@/app/components/Icons/LoadToScaleIcon";
 import { StartMeetingIcon } from "@/app/components/Icons/StartMeetingIcon";
 import MeetingHistory from "@/app/components/Meetings/MeetingHistory";
 import TodayContainer from "@/app/components/SummaryContainers/TodayContainer";
+import ButtonLoadFromScale from "@/app/components/Weighing/ButtonLoadFromScale";
+import ButtonManualInsert from "@/app/components/Weighing/ButtonManualInsert";
 import ButtonPrintPDF from "@/app/components/Weighing/ButtonPrintPDF";
 import { WeighingHistoryTable } from "@/app/components/Weighing/HistoryTable";
 import { Button } from "@/components/ui/button";
@@ -17,7 +19,7 @@ export default function Patient() {
       <div className="fixed top-0 text-center w-full p-0 m-0 border-b-1 border-gray-300 rounded-md  bg-green-100/70 shadow-sm">
         <p>פגישה נוכחית: 123:213</p>
       </div>
-      <main className="flex min-h-screen flex-col p-24">
+      <main className="flex min-h-screen flex-col p-6 md:p-24">
         <Image
           src={"/logo.png"}
           alt={"Logo"}
@@ -26,7 +28,11 @@ export default function Patient() {
           className="mx-auto mb-10"
         />
         <div className="flex gap-2 justify-between items-center">
-          <ButtonIcon icon={<BackIcon />} text="חזרה"></ButtonIcon>
+          <ButtonIcon
+            icon={<BackIcon />}
+            text="חזרה"
+            className="shadow-md"
+          ></ButtonIcon>
           {/* <h1 className="font-header">ישראל ישראלי</h1> */}
           <div className="flex flex-row gap-3 items-center">
             {/* <ButtonIcon icon={<StartMeetingIcon />} text="התחל פגישה" /> */}
@@ -35,7 +41,7 @@ export default function Patient() {
           <ButtonIcon
             icon={<LoadToScaleIcon />}
             text="טען פציינט למשקל"
-            className="text-primary bg-green-100 shadow-lg"
+            className="text-primary bg-green-100 shadow-md"
           ></ButtonIcon>
         </div>
         <h2 className="font-display mt-8">פרטי מטופל:</h2>
@@ -60,7 +66,7 @@ export default function Patient() {
             {/* <div className="w-[300px] h-[200px] bg-green-400"></div> */}
           </section>
           <section>
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-col md:flex-row">
               <DataField name="טלפון" value="052-3123456" />
               <DataField name="אימייל" value="israel.israeli@gmail.com" />
             </div>
@@ -87,20 +93,25 @@ export default function Patient() {
           </section>
         </div>
         <section className="mt-8">
-          <div className="flex justify-between">
-          <h2 className="font-display">היסטוריית שקילות:</h2>
-          <ButtonPrintPDF/>
+          <div className="flex justify-between mb-4">
+            <h2 className="font-display">היסטוריית שקילות:</h2>
+            <ButtonPrintPDF />
           </div>
           <WeighingHistoryTable />
+
+          <div className="flex justify-between mt-4 flex-col md:flex-row gap-4">
+            <ButtonManualInsert />
+            <ButtonLoadFromScale />
+          </div>
         </section>
-        <section>
-          <h2 className="font-display">הערות וסיכומי פגישות:</h2>
+        <section className="mt-8">
+          <h2 className="font-display mb-4">הערות וסיכומי פגישות:</h2>
           <div className="w-full flex gap-6">
             <TodayContainer></TodayContainer>
             <TodayContainer></TodayContainer>
           </div>
         </section>
-        <section>
+        <section className="flex flex-col justify-between items-center w-full pt-8">
           <ButtonMeeting userId="123" />
         </section>
       </main>
