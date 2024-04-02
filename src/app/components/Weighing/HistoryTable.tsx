@@ -207,7 +207,7 @@ export function WeighingHistoryTable() {
         {invoices.map((invoice) => (
           <TableRow key={invoice.invoice}>
             {headers.map((header) => (
-              <TableCell className="text-right">
+              <TableCell key={header.id+""+invoice.invoice} className="text-right">
                 92.3
               </TableCell>
             ))}
