@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model device {
+  id           Int        @id @default(autoincrement())
+  created_at   DateTime   @default(now()) @db.Timestamptz(6)
+  factory_name String?    @db.VarChar
+  pretty_name  String?    @db.VarChar
+  data         Json?      @db.Json
+  active       Boolean?   @default(true)
+  weighing     weighing[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model meeting_summary {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  meeting_id BigInt?
+  text       String?
+  suggestion String?
+  meetings   meetings? @relation(fields: [meeting_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_meeting_summary_meeting_id_fkey")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model meetings {
+  id              BigInt            @id @default(autoincrement())
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  patient_id      Int?
+  start_time      DateTime?         @db.Timestamptz(6)
+  end_time        DateTime?         @db.Timestamptz(6)
+  active          Boolean
+  location        meeting_location?
+  meeting_summary meeting_summary[]
+  patients        patients?         @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_meetings_patient_id_fkey")
+  weighing        weighing[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model patient_addresses {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  patient_id Int?
+  address    String?
+  email      String?   @db.VarChar
+  phone      String?   @db.VarChar
+  patients   patients? @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_patient_addresses_patient_id_fkey")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model patient_physique {
+  id             BigInt    @id @default(autoincrement())
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+  patient_id     Int?
+  weight         Float?    @db.Real
+  height         Float?    @db.Real
+  activity_level Int?      @db.SmallInt
+  patients       patients? @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_patient_physique_patient_id_fkey")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model patients {
+  id                Int                 @id @unique @default(autoincrement())
+  created_at        DateTime            @default(now()) @db.Timestamptz(6)
+  eng_name          String?             @default("") @db.VarChar
+  first_name        String?             @default("") @db.VarChar
+  last_name         String?             @default("") @db.VarChar
+  gender            gender?             @default(Unknown)
+  type              Int?                @default(0) @db.SmallInt
+  date_of_birth     DateTime?           @db.Timestamptz(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  meetings          meetings[]
+  patient_addresses patient_addresses[]
+  patient_physique  patient_physique[]
+  weighing          weighing[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model weighing {
+  id          BigInt         @id @default(autoincrement())
+  created_at  DateTime       @default(now()) @db.Timestamptz(6)
+  patient_id  Int?
+  meeting_id  BigInt?
+  data        Json?          @db.Json
+  type        weighing_type?
+  external_id BigInt?
+  device_id   Int?
+  device      device?        @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_device_id_fkey")
+  meetings    meetings?      @relation(fields: [meeting_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_meeting_id_fkey")
+  patients    patients?      @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_patient_id_fkey")
+}
+
+enum gender {
+  Male
+  Female
+  Other
+  Unknown
+}
+
+enum meeting_location {
+  Office
+  ClientHouse
+  FreelanceOffice
+  FreelanceHouse
+}
+
+enum weighing_type {
+  Automatic
+  Manual
+}
