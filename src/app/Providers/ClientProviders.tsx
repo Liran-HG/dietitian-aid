@@ -2,11 +2,15 @@
 import { DirectionProvider} from "@radix-ui/react-direction"
 
 export default function ClientProviders({
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
+    children
+  }: any) {
+    // TODO: remove any, check why it's bugging
+    // Readonly<{
+    //     children: React.ReactNode;
+    //   }>
   return (
-    <DirectionProvider dir="rtl">{children}</DirectionProvider>
+    <DirectionProvider dir="rtl">
+      {children}
+    </DirectionProvider>
   )
 }

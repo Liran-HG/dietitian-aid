@@ -3,6 +3,7 @@ import { Noto_Sans_Hebrew, Secular_One } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "./Providers/ClientProviders";
 import Footer from "./components/Footer";
+import CurrentMeeting from "./components/Meetings/CurrentMeeting";
 
 const noto = Noto_Sans_Hebrew({
   subsets: ["hebrew"],
@@ -26,10 +27,11 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <ClientProviders>
-          <body className={""}>
-            {children}
-            <Footer/>
-            </body>
+        <body className={""}>
+          <CurrentMeeting />
+          {children}
+          <Footer />
+        </body>
       </ClientProviders>
     </html>
   );

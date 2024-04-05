@@ -11,14 +11,38 @@ import ButtonManualInsert from "@/app/components/Weighing/ButtonManualInsert";
 import ButtonPrintPDF from "@/app/components/Weighing/ButtonPrintPDF";
 import { WeighingHistoryTable } from "@/app/components/Weighing/HistoryTable";
 import { Button } from "@/components/ui/button";
+import { db } from "@/lib/db";
+import { searchPatient } from "@/lib/db/patients";
+import { dateToAge, lg } from "@/lib/utils";
+import { Prisma, patients as Patients} from "@prisma/client";
 import Image from "next/image";
 
-export default function Patient() {
+export default async function Patient() {
+  // //type Patient = Prisma.Args<typeof db.patients, ''>['data']
+  //  // Prisma.patientsCreateInput
+  //  const makeTest = (data: Prisma.patientsFindManyArgs) => {
+     
+  //  }
+  // type Patient = Prisma.Args<typeof db.patients, 'findFirst'>['where']
+  // let query: Patient = {
+  //   id: 123
+  // }
+  // let pt:Prisma.patientsWhereInput = {
+  //   id: 123,
+  //   gender: "Male"
+  // }
+  let patients = await searchPatient({id: 123})
+  lg(patients)
+  patients = await searchPatient({id: 200200312})
+  lg("actual result")
+  lg(patients)
+  let patient = patients!![0];
+  // if(patientRes.date_of_birth != null){
+  //   lg("Age: ", dateToAge(patientRes.date_of_birth))
+  //   lg("Age: ", dateToAge(new Date("1988-07-04T00:41:13.000Z")))
+  // }
+
   return (
-    <>
-      <div className="fixed top-0 text-center w-full p-0 m-0 border-b-1 border-gray-300 rounded-md  bg-green-100/70 shadow-sm">
-        <p>פגישה נוכחית: 123:213</p>
-      </div>
       <main className="flex min-h-screen flex-col p-6 md:p-24">
         <Image
           src={"/logo.png"}
@@ -48,34 +72,32 @@ export default function Patient() {
         <div className="flex justify-between flex-col md:flex-row">
           <section>
             <div className="flex gap-4">
-              <DataField name="שם" value="ישראל" />
-              <DataField name="משפחה" value="ישראלי" />
+              <DataField name="שם" value={patient.first_name} />
+              <DataField name="משפחה" value={patient.last_name} />
             </div>
-            <DataField name="מזהה לועזי" value="israel" />
+            <DataField name="מזהה לועזי" value={patient.eng_name}/>
             <div className="flex gap-4">
-              <DataField name="גיל" value="36.8" />
-              <DataField name="מין" value="זכר" />
+              <DataField name="גיל" value={patient.date_of_birth ? dateToAge(patient.date_of_birth) : ""} />
+              <DataField name="מין" value={patient.gender} />
             </div>
 
             {/* <div className="w-[300px] h-[200px] bg-red-400"></div> */}
           </section>
           <section>
-            <DataField name="ת.ז." value="123456789" />
-            <DataField name="סוג לקוח" value="1" />
+            <DataField name="ת.ז." value={patient.id.toString()} />
+            <DataField name="סוג לקוח" value={patient.type? patient.type.toString() : "חסר"} />
 
             {/* <div className="w-[300px] h-[200px] bg-green-400"></div> */}
           </section>
           <section>
             <div className="flex gap-4 flex-col md:flex-row">
-              <DataField name="טלפון" value="052-3123456" />
-              <DataField name="אימייל" value="israel.israeli@gmail.com" />
+              <DataField name="טלפון" value={patient.patient_addresses[0].phone} />
+              <DataField name="אימייל" value={patient.patient_addresses[0].email} />
             </div>
             <DataField
               name="כתובת"
               multiline={true}
-              value="משכן הכנסת\n
-             אליעזר קפלן 1\n
-             ירושלים, 9195000 "
+              value={patient.patient_addresses[0].address}
             />
             {/* <div className="w-[300px] h-[200px] bg-blue-400"></div> */}
           </section>
@@ -115,6 +137,5 @@ export default function Patient() {
           <ButtonMeeting userId="123" />
         </section>
       </main>
-    </>
   );
 }
