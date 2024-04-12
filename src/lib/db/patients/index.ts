@@ -1,5 +1,5 @@
 import { db } from "@/lib/db/index";
-import { lg } from "@/lib/utils";
+import { lg } from "@/lib/logger/log";
 import { Prisma, patients } from "@prisma/client";
 
 export async function getPatients(limit: number = -1) {

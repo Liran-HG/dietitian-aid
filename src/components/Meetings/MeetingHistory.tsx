@@ -1,6 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from "@/components/ui/separator"
-import React from 'react'
+import React, { Fragment } from 'react'
 
 type Props = {
     userId: string;
@@ -15,12 +15,12 @@ function MeetingHistory(props:Props) {
         <div className="p-4">
         <h4 className="mb-4 text-sm font-medium leading-none">היסטוריית פגישות:</h4>
         {tags.map((tag) => (
-          <>
-            <div key={tag} className="text-sm">
+          <Fragment key={tag}>
+            <div className="text-sm">
               {tag}
             </div>
-            <Separator className="my-2" />
-          </>
+            <Separator className="my-2" key={tag+"_sep"}/>
+          </Fragment>
         ))}
       </div>
     </ScrollArea>

@@ -94,6 +94,7 @@ model weighing {
   device      device?        @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_device_id_fkey")
   meetings    meetings?      @relation(fields: [meeting_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_meeting_id_fkey")
   patients    patients?      @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_patient_id_fkey")
+
 }
 
 enum gender {

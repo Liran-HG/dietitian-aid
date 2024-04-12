@@ -1,19 +1,20 @@
-import { ButtonIcon } from "@/app/components/Buttons/ButtonIcon";
-import ButtonMeeting from "@/app/components/Buttons/ButtonMeeting";
-import { DataField } from "@/app/components/Display/DataField";
-import { BackIcon } from "@/app/components/Icons/BackIcon";
-import { LoadToScaleIcon } from "@/app/components/Icons/LoadToScaleIcon";
-import { StartMeetingIcon } from "@/app/components/Icons/StartMeetingIcon";
-import MeetingHistory from "@/app/components/Meetings/MeetingHistory";
-import TodayContainer from "@/app/components/SummaryContainers/TodayContainer";
-import ButtonLoadFromScale from "@/app/components/Weighing/ButtonLoadFromScale";
-import ButtonManualInsert from "@/app/components/Weighing/ButtonManualInsert";
-import ButtonPrintPDF from "@/app/components/Weighing/ButtonPrintPDF";
-import { WeighingHistoryTable } from "@/app/components/Weighing/HistoryTable";
+import { ButtonIcon } from "@/components/Buttons/ButtonIcon";
+import ButtonMeeting from "@/components/Buttons/ButtonMeeting";
+import { DataField } from "@/components/Display/DataField";
+import { BackIcon } from "@/components/Icons/BackIcon";
+import { LoadToScaleIcon } from "@/components/Icons/LoadToScaleIcon";
+import { StartMeetingIcon } from "@/components/Icons/StartMeetingIcon";
+import MeetingHistory from "@/components/Meetings/MeetingHistory";
+import TodayContainer from "@/components/SummaryContainers/TodayContainer";
+import ButtonLoadFromScale from "@/components/Weighing/ButtonLoadFromScale";
+import ButtonManualInsert from "@/components/Weighing/ButtonManualInsert";
+import ButtonPrintPDF from "@/components/Weighing/ButtonPrintPDF";
+import { WeighingHistoryTable } from "@/components/Weighing/HistoryTable";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { searchPatient } from "@/lib/db/patients";
-import { dateToAge, lg } from "@/lib/utils";
+import { lg } from "@/lib/logger/log";
+import { dateToAge } from "@/lib/utils";
 import { Prisma, patients as Patients} from "@prisma/client";
 import Image from "next/image";
 
@@ -34,7 +35,7 @@ export default async function Patient() {
   let patients = await searchPatient({id: 123})
   lg(patients)
   patients = await searchPatient({id: 200200312})
-  lg("actual result")
+  lg("actual result: ")
   lg(patients)
   let patient = patients!![0];
   // if(patientRes.date_of_birth != null){
