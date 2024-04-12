@@ -39,3 +39,4 @@ next-env.d.ts
 logo.png
 
 keys/*
+supabase/secret_seed.sql
