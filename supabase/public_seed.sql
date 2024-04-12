@@ -14,20 +14,48 @@
 -- The device ID you added in secret_seed.sql
 DO $$
 DECLARE TEST_DEVICE_ID INTEGER := 10;
+DECLARE TEST_DEVICE_ID_MANUAL INTEGER := 11;
 
 BEGIN
+-- Add mock patients
 INSERT INTO "public"."patients" ("id","gov_id", "first_name", "last_name", "eng_name", "gender", "type", "date_of_birth") VALUES 
 ('1000','200699263', 'ישראל', 'גבירול', 'Israel_Gebirul', 'Male', '1', '1998-07-04T00:41:13.000Z'), 
 ('1001','050012343', 'שלמה', 'ארצי', 'Shlomo_Artzi', 'Male', '1', '1949-11-26T00:41:13.000Z'), 
 ('1002','999694540', 'רביץ', 'יהודית', 'Yehudit_Ravitz', 'Female', '2', '1956-12-29T00:41:13.000Z');
 
+-- Add mock patient addresses
+INSERT INTO "public"."patient_addresses" ("patient_id", "address", "email", "phone") VALUES 
+('1001', 'אמפי שוני\nקיסריה', 'shlomo_artzi@test.com', '052-3782980'),
+('1002', 'זאפה תל אביב\nדרך מנחם בגין 144\nתל אביב', 'yehudit@test.com', '052-1282980');
+
+-- Add mock meetings
 INSERT INTO "public"."meetings" ("patient_id","id", "start_time", "end_time", "active", "location") VALUES 
 ('1001','20001', '2022-11-26T00:41:13.000Z', '2022-11-26T01:41:13.000Z','false', 'ClientHouse'),
 ('1001','20002', '2022-04-10T14:41:13.000Z', '2022-04-10T15:41:13.000Z','false', 'FreelanceOffice'),
 ('1001','20003', '2023-11-26T11:54:13.000Z', '2023-11-26T12:22:00.000Z','false', 'Office'),
 ('1002','20004', '2022-01-26T10:33:13.000Z', '2022-01-26T11:12:00.000Z','false', 'Office'),
-('1000','20005', '2022-10-22T07:50:13.000Z', '2022-10-22T08:15:00.000Z','true', 'Office');
+('1000','20005', '2022-10-22T07:50:13.000Z', '2022-10-22T08:15:00.000Z','true', 'Office'),
+('1001','20006', '2023-12-16T12:25:13.000Z', '2023-12-16T13:00:00.000Z','false', 'ClientHouse');
 
+
+-- Add mock patient physique
+INSERT INTO "public"."patient_physique" ("id","patient_id", "height", "weight", "activity_level") VALUES 
+('6000','1001', '1.75', '116.42', '1'),
+('6001','1001', '1.75', '100.12', '2'),
+('6002','1001', '1.75', '104', '1'),
+('6003','1002', '1.64', '76.3', '2'),
+('6004','1002', '1.64', '74', '2');
+
+-- Assign a physique to each patient which will be used to compare history. Useful to change if the client left for a while and came back.
+UPDATE "public"."patients" SET "reference_physique_id" = '6001' WHERE "id" = '1001';
+UPDATE "public"."patients" SET "reference_physique_id" = '6003' WHERE "id" = '1002';
+
+-- Add patient weigning mockup data - manual (simple scale)
+INSERT INTO "public"."weighing" ("id","patient_id", "meeting_id", "device_id","data") VALUES ('300001','1001', '20006',TEST_DEVICE_ID_MANUAL, '{
+   "weight": "82.11",
+   "bmi": "24.1"
+}');
+-- Add patient weigning mockup data - automatic (tanita scale)
 INSERT INTO "public"."weighing" ("id","patient_id", "meeting_id", "device_id","data", "external_id") VALUES ('300000','1001', '20003',TEST_DEVICE_ID, '
    {
       "id":0,
