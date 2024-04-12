@@ -4,4 +4,4 @@
 .env
 config.toml
 *_wdata*
-# secret_seed.sql
+secret_seed.sql
