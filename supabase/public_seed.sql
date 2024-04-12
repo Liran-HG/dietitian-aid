@@ -21,13 +21,16 @@ BEGIN
 INSERT INTO "public"."patients" ("id","gov_id", "first_name", "last_name", "eng_name", "gender", "type", "date_of_birth") VALUES 
 ('1000','200699263', 'ישראל', 'גבירול', 'Israel_Gebirul', 'Male', '1', '1998-07-04T00:41:13.000Z'), 
 ('1001','050012343', 'שלמה', 'ארצי', 'Shlomo_Artzi', 'Male', '1', '1949-11-26T00:41:13.000Z'), 
-('1002','999694540', 'רביץ', 'יהודית', 'Yehudit_Ravitz', 'Female', '2', '1956-12-29T00:41:13.000Z');
+('1002','999694540', 'יהודית', 'רביץ', 'Yehudit_Ravitz', 'Female', '2', '1956-12-29T00:41:13.000Z');
 
 -- Add mock patient addresses
-INSERT INTO "public"."patient_addresses" ("patient_id", "address", "email", "phone") VALUES 
-('1001', 'אמפי שוני\nקיסריה', 'shlomo_artzi@test.com', '052-3782980'),
-('1002', 'זאפה תל אביב\nדרך מנחם בגין 144\nתל אביב', 'yehudit@test.com', '052-1282980');
+INSERT INTO "public"."patient_addresses" ("id","address", "email", "phone") VALUES 
+('100','אמפי שוני\nקיסריה', 'shlomo_artzi@test.com', '052-3782980'),
+('101','זאפה תל אביב\nדרך מנחם בגין 144\nתל אביב', 'yehudit@test.com', '052-1282980');
 
+-- add addresses_id
+UPDATE "public"."patients" SET "addresses_id" = '100' WHERE "id" = '1001';
+UPDATE "public"."patients" SET "addresses_id" = '101' WHERE "id" = '1002';
 -- Add mock meetings
 INSERT INTO "public"."meetings" ("patient_id","id", "start_time", "end_time", "active", "location") VALUES 
 ('1001','20001', '2022-11-26T00:41:13.000Z', '2022-11-26T01:41:13.000Z','false', 'ClientHouse'),
