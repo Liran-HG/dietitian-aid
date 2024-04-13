@@ -17,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { validateIsraeliID } from "@/lib/utils";
 import { CreatePatientSchemaForm as formSchema } from '@/models/Patient/FormCreate';
 import { lg } from "@/lib/logger/log";
 function CreatePatientForm() {
@@ -42,7 +41,6 @@ function CreatePatientForm() {
     <Form {...form}>
        {/* action={createPatient} */}
       <form onSubmit={form.handleSubmit(onSubmit)}> 
-        <h1 className="py-2">צור לקוח</h1>
         <div className="flex flex-col gap-4">
         <FormField
           control={form.control}

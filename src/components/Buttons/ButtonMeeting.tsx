@@ -9,7 +9,7 @@ import { StartMeetingIcon } from "../Icons/StartMeetingIcon";
 import { MenubarSeparator, MenubarTrigger } from "@/components/ui/menubar";
 import { Button } from "@/components/ui/button";
 type Props = {
-  userId: string;
+  userId: number;
 };
 
 export default function ButtonMeeting(props: Props) {

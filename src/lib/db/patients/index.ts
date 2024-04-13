@@ -5,13 +5,30 @@ import { Prisma, patients } from "@prisma/client";
 export async function getPatients(limit: number = -1) {
   return await db.patients.findMany(limit > 0 ? { take: limit } : undefined);
 }
-export async function getPatient(id: number) {
+export async function getPatient(id: number, fullDetails: boolean = false) {
   let res = await db.patients.findFirst({
     where: { id: id },
+    include: {
+      patient_addresses:fullDetails ? true : false,
+      patient_physique: fullDetails ? true : false
+    }
   });
 
   if (res == null) {
     lg("patient not found", id);
+    return null;
+  }
+  return res;
+}
+
+
+export async function getMeetingHistory(patientId: number) {
+  let res = await db.meetings.findMany({
+    where: { patient_id: patientId }
+  });
+
+  if (res == null) {
+    lg("patient meetings not found", patientId);
     return null;
   }
   return res;

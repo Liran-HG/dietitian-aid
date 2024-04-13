@@ -44,41 +44,45 @@ model meetings {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model patient_addresses {
-  id         BigInt    @id @default(autoincrement())
-  created_at DateTime  @default(now()) @db.Timestamptz(6)
-  patient_id Int?
+  id         BigInt     @id @default(autoincrement())
+  created_at DateTime   @default(now()) @db.Timestamptz(6)
   address    String?
-  email      String?   @db.VarChar
-  phone      String?   @db.VarChar
-  patients   patients? @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_patient_addresses_patient_id_fkey")
+  email      String?    @db.VarChar
+  phone      String?    @db.VarChar
+  patients   patients[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model patient_physique {
-  id             BigInt    @id @default(autoincrement())
-  created_at     DateTime  @default(now()) @db.Timestamptz(6)
-  patient_id     Int?
-  weight         Float?    @db.Real
-  height         Float?    @db.Real
-  activity_level Int?      @db.SmallInt
-  patients       patients? @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_patient_physique_patient_id_fkey")
+  id                                                        BigInt     @id @default(autoincrement())
+  created_at                                                DateTime   @default(now()) @db.Timestamptz(6)
+  patient_id                                                Int?
+  weight                                                    Float?     @db.Real
+  height                                                    Float?     @db.Real
+  activity_level                                            Int?       @db.SmallInt
+  patients                                                  patients?  @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_patient_physique_patient_id_fkey")
+  patients_patients_reference_physique_idTopatient_physique patients[] @relation("patients_reference_physique_idTopatient_physique")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model patients {
-  id                Int                 @id @unique @default(autoincrement())
-  created_at        DateTime            @default(now()) @db.Timestamptz(6)
-  eng_name          String?             @default("") @db.VarChar
-  first_name        String?             @default("") @db.VarChar
-  last_name         String?             @default("") @db.VarChar
-  gender            gender?             @default(Unknown)
-  type              Int?                @default(0) @db.SmallInt
-  date_of_birth     DateTime?           @db.Timestamptz(6)
-  updated_at        DateTime?           @default(now()) @db.Timestamptz(6)
-  meetings          meetings[]
-  patient_addresses patient_addresses[]
-  patient_physique  patient_physique[]
-  weighing          weighing[]
+  id                                                                Int                @id @unique @default(autoincrement())
+  created_at                                                        DateTime           @default(now()) @db.Timestamptz(6)
+  eng_name                                                          String?            @default("") @db.VarChar
+  first_name                                                        String?            @default("") @db.VarChar
+  last_name                                                         String?            @default("") @db.VarChar
+  gender                                                            gender?            @default(Unknown)
+  type                                                              Int?               @default(0) @db.SmallInt
+  date_of_birth                                                     DateTime?          @db.Timestamptz(6)
+  updated_at                                                        DateTime?          @default(now()) @db.Timestamptz(6)
+  gov_id                                                            String?            @unique(map: "unique_government_id") @db.VarChar(9)
+  reference_physique_id                                             BigInt?
+  addresses_id                                                      BigInt?
+  meetings                                                          meetings[]
+  patient_physique                                                  patient_physique[]
+  patient_addresses                                                 patient_addresses? @relation(fields: [addresses_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "patient_addresses_patient_id_fkey")
+  patient_physique_patients_reference_physique_idTopatient_physique patient_physique?  @relation("patients_reference_physique_idTopatient_physique", fields: [reference_physique_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_patient_reference_physique_fkey")
+  weighing                                                          weighing[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -94,7 +98,6 @@ model weighing {
   device      device?        @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_device_id_fkey")
   meetings    meetings?      @relation(fields: [meeting_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_meeting_id_fkey")
   patients    patients?      @relation(fields: [patient_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_weighing_patient_id_fkey")
-
 }
 
 enum gender {

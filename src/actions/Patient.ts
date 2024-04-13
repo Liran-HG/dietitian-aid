@@ -1,7 +1,10 @@
 "use server";
+import { getMeetingHistory } from '@/lib/db/patients';
 import { lg } from '@/lib/logger/log';
 import { validateIsraeliID} from '@/lib/utils'
+import { FullMeetingDetailType } from '@/models/Meetings/MeetingDetails';
 import { CreatePatientSchemaForm } from '@/models/Patient/FormCreate';
+import { Prisma, meetings } from '@prisma/client';
 import {z} from 'zod'
 import { zfd } from "zod-form-data";
 // const CreatePatientSchema = zfd.formData({
@@ -35,4 +38,18 @@ export const createPatient = (rawData: z.infer<typeof CreatePatientSchemaForm>) 
     
 
     return true;
+}
+export const getPatientMeetings = async (patientId:number): Promise<FullMeetingDetailType[]> => {
+    let res = (await getMeetingHistory(patientId))
+    // get extension to add location display name
+    let returnRes = Prisma.getExtensionContext(res);
+    let meetingsRes:FullMeetingDetailType[] = returnRes.map((meeting: any) => {
+        return { 
+            id: meeting.id,
+            startTime: meeting.start_time,
+            endTime: meeting.end_time,
+            active: meeting.active,
+            location: meeting.locationDisplayName ?? "לא ידוע"}
+    })
+    return meetingsRes
 }

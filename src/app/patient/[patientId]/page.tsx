@@ -3,46 +3,23 @@ import ButtonMeeting from "@/components/Buttons/ButtonMeeting";
 import { DataField } from "@/components/Display/DataField";
 import { BackIcon } from "@/components/Icons/BackIcon";
 import { LoadToScaleIcon } from "@/components/Icons/LoadToScaleIcon";
-import { StartMeetingIcon } from "@/components/Icons/StartMeetingIcon";
 import MeetingHistory from "@/components/Meetings/MeetingHistory";
 import TodayContainer from "@/components/SummaryContainers/TodayContainer";
 import ButtonLoadFromScale from "@/components/Weighing/ButtonLoadFromScale";
 import ButtonManualInsert from "@/components/Weighing/ButtonManualInsert";
 import ButtonPrintPDF from "@/components/Weighing/ButtonPrintPDF";
 import { WeighingHistoryTable } from "@/components/Weighing/HistoryTable";
-import { Button } from "@/components/ui/button";
-import { db } from "@/lib/db";
-import { searchPatient } from "@/lib/db/patients";
+import { getPatient, searchPatient } from "@/lib/db/patients";
 import { lg } from "@/lib/logger/log";
 import { dateToAge } from "@/lib/utils";
-import { Prisma, patients as Patients} from "@prisma/client";
 import Image from "next/image";
 
-export default async function Patient() {
-  // //type Patient = Prisma.Args<typeof db.patients, ''>['data']
-  //  // Prisma.patientsCreateInput
-  //  const makeTest = (data: Prisma.patientsFindManyArgs) => {
-     
-  //  }
-  // type Patient = Prisma.Args<typeof db.patients, 'findFirst'>['where']
-  // let query: Patient = {
-  //   id: 123
-  // }
-  // let pt:Prisma.patientsWhereInput = {
-  //   id: 123,
-  //   gender: "Male"
-  // }
-  let patients = await searchPatient({id: 123})
-  lg(patients)
-  patients = await searchPatient({id: 200200312})
-  lg("actual result: ")
-  lg(patients)
-  let patient = patients!![0];
-  // if(patientRes.date_of_birth != null){
-  //   lg("Age: ", dateToAge(patientRes.date_of_birth))
-  //   lg("Age: ", dateToAge(new Date("1988-07-04T00:41:13.000Z")))
-  // }
-
+export default async function Patient({ params }: { params: { patientId: string } }) {
+  const patient = await getPatient(parseInt(params.patientId),true);
+  lg("patient", patient);
+  if(!patient){
+    return <main className="flex min-h-screen flex-col p-6 md:p-24"><h2>מטופל לא נמצא</h2></main>
+  }
   return (
       <main className="flex min-h-screen flex-col p-6 md:p-24">
         <Image
@@ -61,7 +38,7 @@ export default async function Patient() {
           {/* <h1 className="font-header">ישראל ישראלי</h1> */}
           <div className="flex flex-row gap-3 items-center">
             {/* <ButtonIcon icon={<StartMeetingIcon />} text="התחל פגישה" /> */}
-            <ButtonMeeting userId="123" />
+            <ButtonMeeting userId={patient.id} />
           </div>
           <ButtonIcon
             icon={<LoadToScaleIcon />}
@@ -85,20 +62,20 @@ export default async function Patient() {
             {/* <div className="w-[300px] h-[200px] bg-red-400"></div> */}
           </section>
           <section>
-            <DataField name="ת.ז." value={patient.id.toString()} />
+            <DataField name="ת.ז." value={patient.gov_id} />
             <DataField name="סוג לקוח" value={patient.type? patient.type.toString() : "חסר"} />
 
             {/* <div className="w-[300px] h-[200px] bg-green-400"></div> */}
           </section>
           <section>
             <div className="flex gap-4 flex-col md:flex-row">
-              <DataField name="טלפון" value={patient.patient_addresses[0].phone} />
-              <DataField name="אימייל" value={patient.patient_addresses[0].email} />
+              <DataField name="טלפון" value={patient.patient_addresses?.phone ?? ""} />
+              <DataField name="אימייל" value={patient.patient_addresses?.email ?? ""} />
             </div>
             <DataField
               name="כתובת"
               multiline={true}
-              value={patient.patient_addresses[0].address}
+              value={patient.patient_addresses?.address ?? ""}
             />
             {/* <div className="w-[300px] h-[200px] bg-blue-400"></div> */}
           </section>
@@ -112,7 +89,7 @@ export default async function Patient() {
             {/* <div className="w-[300px] h-[200px] bg-blue-400"></div> */}
           </section>
           <section className="w-full md:w-1/3 p-4 justify-self-center md:justify-self-start">
-            <MeetingHistory userId={"123"}></MeetingHistory>
+            <MeetingHistory userId={patient.id}></MeetingHistory>
           </section>
         </div>
         <section className="mt-8">
@@ -135,7 +112,7 @@ export default async function Patient() {
           </div>
         </section>
         <section className="flex flex-col justify-between items-center w-full pt-8">
-          <ButtonMeeting userId="123" />
+          <ButtonMeeting userId={patient.id} />
         </section>
       </main>
   );
