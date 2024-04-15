@@ -8,7 +8,7 @@ import { DisplayMeetingType, FullMeetingDetailType } from '@/models/Meetings/Mee
 import MeetingInformationLine from './MeetingInformationLine';
 import { useMeetingsInformation } from '@/hooks/useMeetingsInformation';
 import SpinnerIcon from '../Icons/SpinnerIcon';
-import { usePusherRealtime } from '@/hooks/usePusherRealtime';
+import { useRealtime } from '@/hooks/useRealtime';
 
 type Props = {
   patientId: number;
@@ -22,8 +22,7 @@ function MeetingsSkeleton() {
   )
 }
 function MeetingHistory(props: Props) {
-  //const { meetings, isLoading, isFetching, isRefetching } = useMeetingsInformation(props.patientId);
-  const { data, isLoading, isFetching } = usePusherRealtime<DisplayMeetingType>(["patientMeetings", props.patientId], async () => {
+  const { data, isLoading, isFetching } = useRealtime<DisplayMeetingType>(["patientMeetings", props.patientId], async () => {
     const res = await getPatientMeetings(props.patientId)
     let resp = res.map(
       (meeting: FullMeetingDetailType) =>
@@ -36,7 +35,11 @@ function MeetingHistory(props: Props) {
         }) as DisplayMeetingType
     )
     return resp as DisplayMeetingType[]
+  },{
+    refetchInterval: 1000 * 60
   })
+
+
   return (
     <ScrollArea className='max-h-48 w-full rounded-md border overflow-auto'>
       <div className="p-4">
