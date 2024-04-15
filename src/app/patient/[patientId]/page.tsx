@@ -1,3 +1,4 @@
+import BackButton from "@/components/Buttons/BackButton";
 import { ButtonIcon } from "@/components/Buttons/ButtonIcon";
 import ButtonMeeting from "@/components/Buttons/ButtonMeeting";
 import { DataField } from "@/components/Display/DataField";
@@ -30,11 +31,7 @@ export default async function Patient({ params }: { params: { patientId: string 
           className="mx-auto mb-10"
         />
         <div className="flex gap-2 justify-between items-center">
-          <ButtonIcon
-            icon={<BackIcon />}
-            text="חזרה"
-            className="shadow-md"
-          ></ButtonIcon>
+          <BackButton/>
           {/* <h1 className="font-header">ישראל ישראלי</h1> */}
           <div className="flex flex-row gap-3 items-center">
             {/* <ButtonIcon icon={<StartMeetingIcon />} text="התחל פגישה" /> */}
@@ -89,7 +86,7 @@ export default async function Patient({ params }: { params: { patientId: string 
             {/* <div className="w-[300px] h-[200px] bg-blue-400"></div> */}
           </section>
           <section className="w-full md:w-1/3 p-4 justify-self-center md:justify-self-start">
-            <MeetingHistory userId={patient.id}></MeetingHistory>
+            <MeetingHistory patientId={patient.id}></MeetingHistory>
           </section>
         </div>
         <section className="mt-8">

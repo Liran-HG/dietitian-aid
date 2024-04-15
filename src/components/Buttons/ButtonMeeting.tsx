@@ -8,6 +8,7 @@ import {
 import { StartMeetingIcon } from "../Icons/StartMeetingIcon";
 import { MenubarSeparator, MenubarTrigger } from "@/components/ui/menubar";
 import { Button } from "@/components/ui/button";
+import { createMeeting } from "@/actions/Meetings";
 type Props = {
   userId: number;
 };
@@ -19,7 +20,7 @@ export default function ButtonMeeting(props: Props) {
         <MenubarTrigger asChild><Button variant={"outline"} 
             className="shadow-md"><><StartMeetingIcon /> פגישה</></Button></MenubarTrigger>
         <MenubarContent className="border-secondary border-2 rounded-md rtl:text-right rtl:-left-[200px] p-3 cursor-pointer shadow-md z-10 bg-white space-y-2 my-2 -mr-14">
-          <MenubarItem>
+          <MenubarItem onClick={() => createMeeting(1001)}>
           <b>פנימית </b>
             פגישה פרונטלית
           </MenubarItem>

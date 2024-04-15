@@ -3,12 +3,17 @@ import winston, { Logger, format, transports } from "winston";
 const { LoggingWinston } = require("@google-cloud/logging-winston");
 const { combine, timestamp, json } = winston.format;
 
+
+const { Logtail } = require('@logtail/node');
+const { LogtailTransport } = require('@logtail/winston');
+
+const logtail = new Logtail(process.env.BETTERSTACK_SOURCE_TOKEN);
 let trans = [
   new transports.Console({
     format: format.combine(format.simple(), format.colorize()),
-  }),
+  })
 ];
-if (process.env.USE_GCLOUD) {
+if (process.env.USE_GCLOUD?.toUpperCase() == "TRUE") {
   trans = [
     new LoggingWinston({
       projectId: process.env.GOOGLE_PROJECT_ID,
@@ -19,6 +24,15 @@ if (process.env.USE_GCLOUD) {
         }
       },
     }),
+    new transports.Console({
+      format: format.combine(format.simple(), format.colorize()),
+    }),
+  ];
+}
+
+if (process.env.USE_BETTERSTACK?.toUpperCase() == "TRUE") {
+  trans = [
+    new LogtailTransport(logtail),
     new transports.Console({
       format: format.combine(format.simple(), format.colorize()),
     }),

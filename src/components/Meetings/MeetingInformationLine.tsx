@@ -5,6 +5,8 @@ import React, { Fragment } from 'react'
 import { Separator } from '../ui/separator'
 import { timeDiffInMinutes } from '@/lib/time_util'
 
+const InactiveMeeting = ({...props}: DisplayMeetingType) => <div><b>{props.startTime.toLocaleDateString()}</b> {props.startTime.toLocaleTimeString('he-IL')}-{props.endTime.toLocaleTimeString('he-IL')} ({timeDiffInMinutes(props.startTime,props.endTime)} דק'), {props.location}</div>
+const ActiveMeeting =  ({...props}: DisplayMeetingType) => <div><b>פגישה פעילה</b> {props.startTime.toLocaleTimeString('he-IL')}-{new Date().toLocaleTimeString('he-IL')} ({timeDiffInMinutes(props.startTime,new Date())} דק'), {props.location}</div>
 function MeetingInformationLine(props: {
     withSeparator: boolean
 } & DisplayMeetingType) {
@@ -12,9 +14,9 @@ function MeetingInformationLine(props: {
     return (
         <Fragment>
           <div className="text-sm">
-            <b>{props.startTime.toLocaleDateString()}</b> {props.startTime.toLocaleTimeString('he-IL')}-{props.endTime.toLocaleTimeString('he-IL')} ({timeDiffInMinutes(props.startTime,props.endTime)} דק'), {props.location}
+            {props.active ? <ActiveMeeting {...props}/> : <InactiveMeeting {...props}/>}
           </div>
-          <Separator className="my-2" />
+          {props.withSeparator && <Separator className="my-2" />}
         </Fragment>
       )
 }
