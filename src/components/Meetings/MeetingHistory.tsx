@@ -6,7 +6,6 @@ import { Skeleton } from '../ui/skeleton';
 import { useRepeatElement } from '@/hooks/useRepeatElement';
 import { DisplayMeetingType, FullMeetingDetailType } from '@/models/Meetings/MeetingDetails';
 import MeetingInformationLine from './MeetingInformationLine';
-import { useMeetingsInformation } from '@/hooks/useMeetingsInformation';
 import SpinnerIcon from '../Icons/SpinnerIcon';
 import { useRealtime } from '@/hooks/useRealtime';
 

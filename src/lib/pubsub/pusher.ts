@@ -18,11 +18,11 @@ export const pusherServer = new PusherServer({
 
 export const pusherClient = new PusherClient(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
   cluster: 'eu',
-//   authEndpoint: '/api/pusher-auth',
-//   authTransport: 'ajax',
-//   auth: {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   },
+  authEndpoint: '/api/pusher-auth',
+  authTransport: 'ajax',
+  auth: {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  },
 })

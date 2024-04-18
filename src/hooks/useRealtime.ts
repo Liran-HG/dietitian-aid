@@ -1,7 +1,8 @@
 "use client"
+import { lg } from "@/lib/logger/log"
 import { pusherClient } from "@/lib/pubsub/pusher"
 import { useQuery } from "@tanstack/react-query"
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 
 export function useRealtime<T>(
     queryKey: any[],
@@ -22,6 +23,7 @@ export function useRealtime<T>(
     const { data, isLoading, refetch, isFetching } = useQuery({
         queryKey: queryKey,
         queryFn: async () => {
+            lg("Query Function called ", queryKey,seed,options)
             return await queryFun()
         },
         refetchInterval: withPusher ? false : refetchInterval,
@@ -41,7 +43,7 @@ export function useRealtime<T>(
     }
 
     const invalidate = async () => {
-        console.log("Invalidated ", queryKey)
+        lg("Invalidated ",seed, queryKey)
         refetch()
     }
 
