@@ -32,9 +32,7 @@ export default async function Patient({ params }: { params: { patientId: string 
         />
         <div className="flex gap-2 justify-between items-center">
           <BackButton/>
-          {/* <h1 className="font-header">ישראל ישראלי</h1> */}
           <div className="flex flex-row gap-3 items-center">
-            {/* <ButtonIcon icon={<StartMeetingIcon />} text="התחל פגישה" /> */}
             <ButtonMeeting userId={patient.id} />
           </div>
           <ButtonIcon
@@ -65,7 +63,7 @@ export default async function Patient({ params }: { params: { patientId: string 
             {/* <div className="w-[300px] h-[200px] bg-green-400"></div> */}
           </section>
           <section>
-            <div className="flex gap-4 flex-col md:flex-row">
+            <div className="flex gap-1 flex-col">
               <DataField name="טלפון" value={patient.patient_addresses?.phone ?? ""} />
               <DataField name="אימייל" value={patient.patient_addresses?.email ?? ""} />
             </div>

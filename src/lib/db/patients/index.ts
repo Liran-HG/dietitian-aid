@@ -20,8 +20,14 @@ export async function getPatient(id: number, fullDetails: boolean = false) {
   }
   return res;
 }
-
-
+export async function createPatient( data: Prisma.patientsCreateInput) {
+  let res = await db.patients.create({ data: data });
+  if(res && res.id) return res.id;  
+  return null;
+}
+export async function patientExists(govId: string) {
+  return await db.patients.count({ where: { gov_id: govId } }) > 0;
+}
 export async function getMeetingHistory(patientId: number) {
   let res = await db.meetings.findMany({
     where: { patient_id: patientId }

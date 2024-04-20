@@ -13,6 +13,9 @@ export function dateToAge(date: Date): string {
     const age = new Date(diff)
     return `${Math.floor(age.getUTCFullYear() - 1970)}.${("0" + age.getMonth()).slice(-2)}`
 }
+export function validateEnglishInput(text: string): boolean {
+    return /^[a-zA-Z0-9_\- ]+$/.test(text)
+}
 
 export function validateIsraeliID(id: string): boolean {
     // Using algorithm from https://en.wikipedia.org/wiki/Israeli_ID, https://gist.github.com/freak4pc/6802be89d019bca57756a675d761c5a8
