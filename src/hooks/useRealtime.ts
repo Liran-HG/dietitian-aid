@@ -6,7 +6,7 @@ import { useEffect } from "react"
 
 export function useRealtime<T>(
     queryKey: any[],
-    queryFun: () => Promise<T[] | T>,
+    queryFun?: () => Promise<T[] | T>,
     options?: {
         withPusher?: boolean,
         refetchInterval?: number
@@ -24,7 +24,7 @@ export function useRealtime<T>(
         queryKey: queryKey,
         queryFn: async () => {
             lg("Query Function called ", queryKey,seed,options)
-            return await queryFun()
+            if(queryFun) return await queryFun()
         },
         refetchInterval: withPusher ? false : refetchInterval,
         staleTime: withPusher ? 0 : refetchInterval,

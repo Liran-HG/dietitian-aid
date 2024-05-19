@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <ClientProviders>
-        <body className={"flex flex-col h-screen justify-between"}>
+        <body className={"flex flex-col min-h-screen justify-between"}>
           <CurrentMeeting />
           {children}
           <Footer />

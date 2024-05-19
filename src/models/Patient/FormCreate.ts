@@ -1,7 +1,7 @@
 import { validateEnglishInput, validateIsraeliID } from "@/lib/utils"
 import { z } from "zod"
-
-export const CreatePatientSchemaForm = z.object({
+import { gender } from "@prisma/client"
+const CreatePatientSchemaFormObj = {
     first_name: z.string().min(2, {
         message: "שם חייב להכיל לפחות 2 תווים.",
     }),
@@ -19,4 +19,27 @@ export const CreatePatientSchemaForm = z.object({
         .refine((val: string) => validateEnglishInput(val), {
             message: "מזהה לועזי יכול להכיל אותיות באנגלית, מספרים, ומקפים בלבד.",
         }),
-})
+}
+export const CreatePatientSchemaForm = z.object(CreatePatientSchemaFormObj)
+//const genders= Object.values(gender)
+export const CreatePatientSchemaFormFull = z.object(
+    {
+        ...CreatePatientSchemaFormObj, 
+        gender: z.nativeEnum(gender, { required_error: "יש לבחור מגדר" }),
+        type: z.enum(["1", "2","3", "4","5", "6"], { required_error: "יש לבחור סוג לקוח" }).default("1"),
+        phone: z.string(),
+        address: z.string(),
+        email: z.string().email({ message: "כתובת אימייל לא תקינה" }),
+
+        activity_level: z.number(),
+        height: z.number(),
+        weight: z.number(),
+        
+        
+        // date_of_birth: z.date().or(z.string().refine((val: string) => validateIsraeliID(val), {
+            
+        // }))
+    }
+
+)
+
